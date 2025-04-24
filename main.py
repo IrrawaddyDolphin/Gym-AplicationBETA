@@ -1,4 +1,5 @@
 import sqlite3
+from beta_plan_generator import whats_goal,level,generate_plan
 def image():
     info=sqlite3.connect("daneUzytkownika.db")
     cursor=info.cursor()
@@ -75,4 +76,40 @@ def addTraining(userId):
     training_info.commit()
     training_info.close()
 
-addTraining(1)
+def get_info_about_user_years(userId):
+    info=sqlite3.connect("daneUzytkownika.db")
+    cursor=info.cursor()
+    query="SELECT * FROM user_info WHERE id = ?"
+    cursor.execute(query, (userId,))
+    result = cursor.fetchone()
+    result=result[6]
+    info.close()
+
+    return result
+def get_info_about_user_goal(userId):
+    info=sqlite3.connect("daneUzytkownika.db")
+    cursor=info.cursor()
+    query="SELECT * FROM user_info WHERE id = ?"
+    cursor.execute(query, (userId,))
+    result = cursor.fetchone()
+    result= result[5]
+    info.close()
+
+    return result
+
+print("1. Add user")
+print("2. Add training")
+print("3. Generate plan for me")
+choice=input("What would you like to do? (type number) ")
+if choice=="1":
+    addUser()
+elif choice=="2":
+    id=int(input("What's your id? "))
+    addTraining(id)
+elif choice=="3":
+    id=int(input("What's your id? "))
+    number=get_info_about_user_years(id)
+    users_lvl=level(number)
+    goal1=get_info_about_user_goal(id)
+    goal=whats_goal(goal1)
+    print(generate_plan(users_lvl,goal))

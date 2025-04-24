@@ -14,14 +14,16 @@ def whats_goal(goal):
         return "maintain_hypertrophy"
     
 def level(years_experience,bench=None,squat=None,deadlift=None, body_weight=None):
-    if bench/body_weight>=2 or squat/body_weight>=3 or deadlift/body_weight>=4:
+    if bench==None and squat==None and deadlift==None:
+        if years_experience<1:
+            return "beginner"
+        elif 1 <=years_experience<5:
+            return "intermediate"
+        else:
+            return "advanced"
+    elif bench/body_weight>=2 or squat/body_weight>=3 or deadlift/body_weight>=4:
         return "advanced"    
-    if years_experience<1:
-        return "beginner"
-    elif 1 <=years_experience<5:
-        return "intermediate"
-    else:
-        return "advanced"
+
 
 def generate_plan(user_level, goal):
     plans= {
@@ -77,5 +79,5 @@ def generate_plan(user_level, goal):
             plan = [plans["Upper Lower"][1], plans["Strength"][0], plans["Strength"][1]]
         else:
             plan = [plans["Upper Lower"][1], plans["Strength"][1]]
-    final_play=[]
-    final_play.append(plan[0])
+    return plan
+
