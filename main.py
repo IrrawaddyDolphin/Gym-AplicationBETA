@@ -1,5 +1,6 @@
 import sqlite3
 from beta_plan_generator import whats_goal,level,generate_plan
+from smart_goal import get_true_goal
 def image():
     info=sqlite3.connect("daneUzytkownika.db")
     cursor=info.cursor()
@@ -111,5 +112,7 @@ elif choice=="3":
     number=get_info_about_user_years(id)
     users_lvl=level(number)
     goal1=get_info_about_user_goal(id)
-    goal=whats_goal(goal1)
-    print(generate_plan(users_lvl,goal))
+    print(goal1)
+    #goal=whats_goal(goal1)
+    goal2=get_true_goal(goal1)
+    print(generate_plan(users_lvl,goal2))

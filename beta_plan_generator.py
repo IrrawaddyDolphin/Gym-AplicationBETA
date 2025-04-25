@@ -1,3 +1,4 @@
+#beta version whats_goal < smart_goal
 def whats_goal(goal):
     goal=goal.lower()
     if "bulk" in goal and "strength" in goal:
