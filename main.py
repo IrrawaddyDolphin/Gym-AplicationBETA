@@ -136,41 +136,55 @@ def input_sleep(data):
     cursor.execute("""UPDATE training_history SET hours_sleep = ? WHERE date =? AND userId=?""",(sleep,date,userId))
     conn.commit()
     conn.close()
-print("1. Add user")
-print("2. Add training")
-print("3. Generate plan for me")
-print("4. At the morning: Input hours of sleep and update your soreness and stress levels")
-print("5. Check how hard should I train today")
-choice=input("What would you like to do? (type number) ")
-if choice=="1":
-    addUser()
-elif choice=="2":
-    id=int(input("What's your id? "))
-    addTraining(id)
-elif choice=="3":
-    id=int(input("What's your id? "))
-    number=get_info_about_user_years(id)
-    users_lvl=level(number)
-    goal1=get_info_about_user_goal(id)
-    print(goal1)
-    #goal=whats_goal(goal1)
-    goal2=get_true_goal(goal1)
-    print(generate_plan(users_lvl,goal2))
-#For now lets start with 3 levels of "being ready" fatiqued/mid ready/ready
-#generate_plan should return training for each lvl [streching/from main sets -1 set/go full in]
-#input=h of sleep, fatique, stress, kcal from previous day x/2600(for example)
-elif choice=="4":
-    if input("Do you want to input other date then yesterdays? Y/N ")=="Y":
-        date=input("Date: ")
+prawda=True
+while prawda:
+    print("1. Add user")
+    print("2. Add training")
+    print("3. Generate plan for me")
+    print("4. At the morning: Input hours of sleep and update your soreness and stress levels")
+    print("5. Check how hard should I train today")
+    print("X. Bye: type anything")
+    choice=input("What would you like to do? (type number) ")
+    if choice=="1":
+        addUser()
+    elif choice=="2":
+        id=int(input("What's your id? "))
+        addTraining(id)
+    elif choice=="3":
+        id=int(input("What's your id? "))
+        number=get_info_about_user_years(id)
+        users_lvl=level(number)
+        goal1=get_info_about_user_goal(id)
+        print(goal1)
+        #goal=whats_goal(goal1)
+        goal2=get_true_goal(goal1)
+        print(generate_plan(users_lvl,goal2))
+    #For now lets start with 3 levels of "being ready" fatiqued/mid ready/ready
+    #generate_plan should return training for each lvl [streching/from main sets -1 set/go full in]
+    #input=h of sleep, fatique, stress, kcal from previous day x/2600(for example)
+    elif choice=="4":
+        if input("Do you want to input other date then yesterdays? Y/N ")=="Y":
+            date=input("Date: ")
+        else:
+            date=(datetime.today()-timedelta(days=1)).strftime("%Y-%m-%d")
+        userId=int(input("What's your user ID? "))
+        input_soreness_and_stress_lvl(date)
+        input_sleep(date)
+    elif choice=="5":
+        userId=int(input("What's your user ID? "))
+        sore,stress,sleep,avg_intensity=check_how_ready(userId)
+        print(sore,stress,sleep,avg_intensity)
+        if sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<-7:
+            print("GO TO SLEEP")
+        elif sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<-3:
+            print("Light")
+        elif -3<=sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<3:
+            print("Medium")
+        elif 3<=sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<=10:
+            print("Hard")
     else:
-        date=(datetime.today()-timedelta(days=1)).strftime("%Y-%m-%d")
-    userId=int(input("What's your user ID? "))
-    input_soreness_and_stress_lvl(date)
-    input_sleep(date)
-elif choice=="5":
-    userId=int(input("What's your user ID? "))
-    check_how_ready(userId)
+        prawda=False
 
-#BTW I SHOULD INSERT INFO ABOUT SORENESS ETC. TO TODAYS DATE
-#AND AFTER THAT I SHOULD UPDATE TRAINING INFO
-#BUT FOR NOW LETS KEEP IT THAT WAY
+    #BTW I SHOULD INSERT INFO ABOUT SORENESS ETC. TO TODAYS DATE
+    #AND AFTER THAT I SHOULD UPDATE TRAINING INFO
+    #BUT FOR NOW LETS KEEP IT THAT WAY
