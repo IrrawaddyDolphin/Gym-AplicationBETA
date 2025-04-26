@@ -25,7 +25,7 @@ def level(years_experience,bench=None,squat=None,deadlift=None, body_weight=None
     elif bench/body_weight>=2 or squat/body_weight>=3 or deadlift/body_weight>=4:
         return "advanced"    
 
-
+#ADD MORE FUNCTIONALITIES
 def generate_plan(user_level, goal):
     plans= {
         "FBW" : ["FBW 3x/week mid volume ", "FBW with progression"],

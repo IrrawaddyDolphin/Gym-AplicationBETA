@@ -40,7 +40,8 @@ def check_how_ready(userId):
     date_start=date_end -timedelta(days=3)
     #df=pd.read_sql_query("SELECT addictional_notes FROM training_history", conn)
     wait="""SELECT intensity,addictional_notes FROM training_history WHERE userId=? AND date BETWEEN ? AND ? ORDER BY date ASC"""
-    df= pd.read_sql_query(wait,conn,params=(1,date_start,date_end))
+    df= pd.read_sql_query(wait,conn,params=(userId,date_start,date_end))
     conn.close()
     print(df.head())
+    print(df["intensity"].sum()/len(df["intensity"]))
 check_how_ready(1)

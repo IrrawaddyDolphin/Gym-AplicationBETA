@@ -1,6 +1,7 @@
 import sqlite3
 from beta_plan_generator import whats_goal,level,generate_plan
 from smart_goal import get_true_goal
+from user_ready import check_how_ready
 from datetime import datetime, timedelta
 def image():
     info=sqlite3.connect("daneUzytkownika.db")
@@ -128,11 +129,10 @@ print("1. Add user")
 print("2. Add training")
 print("3. Generate plan for me")
 print("4. Update your soreness and stress levels")
+print("5. Check how hard should I train today")
 choice=input("What would you like to do? (type number) ")
 if choice=="1":
     addUser()
-    date=input("Date: ")
-    input_soreness_and_stress_lvl(date)
 elif choice=="2":
     id=int(input("What's your id? "))
     addTraining(id)
@@ -154,3 +154,6 @@ elif choice=="4":
     else:
         date=(datetime.today()-timedelta(days=1)).strftime("%Y-%m-%d")
     input_soreness_and_stress_lvl(date)
+elif choice=="5":
+    userId=int(input("What's your user ID? "))
+    check_how_ready(userId)
