@@ -59,6 +59,7 @@ def image_trainings():
         addictional_notes TEXT,
         soreness_level INTEGER,
         stress_level INTEGER,
+        hours_sleep INTEGER,
         FOREIGN KEY(userId) REFERENCES user_info(id)
                    )
 """)
@@ -107,16 +108,18 @@ def input_soreness_and_stress_lvl(date):
     #stress=float(input("How would you describe your stress levels thruout last 3 days: (1-10): "))
     sorenessstress=sqlite3.connect("trainingHistory.db")
     cursor=sorenessstress.cursor()
-    cursor.execute("SELECT * FROM training_history WHERE date = ?",(date,))
+    #userId=int(input("Whats your user ID? "))
+    cursor.execute("SELECT * FROM training_history WHERE date = ? AND userId=?",(date,userId))
     wynik=cursor.fetchone()
     if wynik:
+        #userId=int(input("Whats your user ID? "))
         soreness=float(input("What's your soreness for today? (1-10): "))
         stress=float(input("How would you describe your stress levels thruout last 3 days: (1-10): "))
         cursor.execute("""UPDATE training_history SET soreness_level = ?, stress_level = ?
-                    WHERE date = ?
-        """,(soreness,stress,date))
+                    WHERE date = ? AND userId = ?
+        """,(soreness,stress,date,userId))
     else:
-        userId=int(input("What's your user's ID? "))
+        #userId=int(input("What's your user's ID? "))
         soreness=float(input("What's your soreness for today? (1-10): "))
         stress=float(input("How would you describe your stress levels thruout last 3 days: (1-10): "))
         cursor.execute("""INSERT INTO training_history(userId,date,soreness_level, stress_level)
@@ -124,11 +127,19 @@ def input_soreness_and_stress_lvl(date):
                    """,(userId,date,soreness,stress))
     sorenessstress.commit()
     sorenessstress.close()
-
+def input_sleep(data):
+    #userId=int(input("What's your user ID? "))
+    image_trainings()
+    conn=sqlite3.connect("trainingHistory.db")
+    cursor=conn.cursor()
+    sleep=float(input("How much hours of sleep did you get this night? "))
+    cursor.execute("""UPDATE training_history SET hours_sleep = ? WHERE date =? AND userId=?""",(sleep,date,userId))
+    conn.commit()
+    conn.close()
 print("1. Add user")
 print("2. Add training")
 print("3. Generate plan for me")
-print("4. Update your soreness and stress levels")
+print("4. At the morning: Input hours of sleep and update your soreness and stress levels")
 print("5. Check how hard should I train today")
 choice=input("What would you like to do? (type number) ")
 if choice=="1":
@@ -153,7 +164,13 @@ elif choice=="4":
         date=input("Date: ")
     else:
         date=(datetime.today()-timedelta(days=1)).strftime("%Y-%m-%d")
+    userId=int(input("What's your user ID? "))
     input_soreness_and_stress_lvl(date)
+    input_sleep(date)
 elif choice=="5":
     userId=int(input("What's your user ID? "))
     check_how_ready(userId)
+
+#BTW I SHOULD INSERT INFO ABOUT SORENESS ETC. TO TODAYS DATE
+#AND AFTER THAT I SHOULD UPDATE TRAINING INFO
+#BUT FOR NOW LETS KEEP IT THAT WAY

@@ -14,10 +14,9 @@ def check_how_ready(userId):
     df= pd.read_sql_query(wait,conn,params=(userId,date_start,date_end))
     df1=pd.read_sql_query(wait1,conn,params=(userId,date_end-timedelta(days=1)))
     conn.close()
-    print(df.head())
-    print(df1.head(1))
+    #print(df.head())
+    #print(df1.head(1))
     avg_intensity=df["intensity"].sum()/len(df["intensity"])
     sore=df1.loc[0,"soreness_level"]
     stress=df1.loc[0,"stress_level"]
     print(sore,stress,avg_intensity)
-check_how_ready(1)
