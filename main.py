@@ -174,14 +174,17 @@ while prawda:
         userId=int(input("What's your user ID? "))
         sore,stress,sleep,avg_intensity=check_how_ready(userId)
         print(sore,stress,sleep,avg_intensity)
-        if sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<-7:
-            print("GO TO SLEEP")
-        elif sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<-3:
-            print("Light")
-        elif -3<=sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<3:
-            print("Medium")
-        elif 3<=sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<=10:
-            print("Hard")
+        if None in (sore, stress, sleep, avg_intensity):
+            print("Brakuje wprowadzenia danych do oceny")
+        else:
+            if sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<-7:
+                print("GO TO SLEEP")
+            elif sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<-3:
+                print("Light")
+            elif -3<=sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<3:
+                print("Medium")
+            elif 3<=sleep*0.6-sore*0.4-stress*0.3-avg_intensity*0.2<=10:
+                print("Hard")
     else:
         prawda=False
 

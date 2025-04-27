@@ -16,6 +16,8 @@ def check_how_ready(userId):
     conn.close()
     #print(df.head())
     #print(df1.head(1))
+    if df.empty or df1.empty:
+        return None, None, None, None
     avg_intensity=df["intensity"].sum()/len(df["intensity"])
     sore=df1.loc[0,"soreness_level"]
     stress=df1.loc[0,"stress_level"]
